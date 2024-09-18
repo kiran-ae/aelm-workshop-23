@@ -1,0 +1,25 @@
+name: Go
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21.x'
+      - name: Install dependencies
+        run: go get ./workshop/
+      - name: Build
+        run: go build -o ../bin/workshop -v ./...
+      - name: Test with the Go CLI
+        run: go test
+      - name: Upload /bin folder as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: workshop
+          path: bin/
+          retention-days: 1
