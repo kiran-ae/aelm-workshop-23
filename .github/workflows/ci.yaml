@@ -6,7 +6,7 @@ on:
       - '**'
 
 env:
-  DOCKER_REPOSITORY: kiran
+  DOCKER_REPOSITORY: tourna
   DOCKER_IMAGE: aelm-image
 
 jobs:
@@ -48,9 +48,16 @@ jobs:
             username: ${{secrets.DOCKER_USERNAME}}
             password: ${{secrets.DOCKER_PAD}}
 
-        - name: Build and push Docker image
-          uses: docker/build-push-action@v3
+        - name: Extract metadata (tags, labels) for Docker
+          uses: docker/metadata-action@v4
+          id: meta
           with:
-            context: .
-            file: Dockerfile
-            push: true
+            images: ${{env.DOCKER_REPOSITORY}}/${{env.DOCKER_IMAGE}}
+
+        - name: Build and push Docker image
+            uses: docker/build-push-action@v3
+            with:
+              context: .
+              file: Dockerfile
+              push: true
+              tags: ${{ steps.meta.outputs.tags }}
