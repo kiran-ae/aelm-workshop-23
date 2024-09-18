@@ -22,7 +22,7 @@ jobs:
         with:
           go-version: ${{ env.GOLANG_VERSION }}
       - name: Build
-        run: go build -o ../bin/workshop -v ./...
+        run: cd workshop-service && go build -o ../bin/workshop 
       - name: Test with the Go CLI
         run: go test
       - name: Upload /bin folder as artifact
